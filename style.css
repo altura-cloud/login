@@ -1,0 +1,167 @@
+:root {
+    --valid-border-color:#004d00;
+    --valid-body-color:#ccffcc;
+    --invalid-border-color:#990000;
+    --invalid-body-color:#ffc2b3;
+    --accent-color: #666666;
+    --bg-first: #ffffd6;
+    --bg-second: #ffeee6;
+    --bg-third: #d1a5c7;
+    --bg-fourth: #2b2e70;
+    --font-size: 17pt;
+}
+
+
+@keyframes bobbing {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  33% {
+    transform: translateY(-1px); /* adjust the "height" of the bob */
+  }
+  66% {
+    transform: translateY(1px);
+  }
+}
+
+html {
+    font-family: Helvetica;
+}
+
+body {
+    font-size: var(--font-size);
+    background: linear-gradient(180deg,var(--bg-first) 0%, var(--bg-second) 36%, var(--bg-third) 67%, var(--bg-fourth) 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.hint {
+  display: flex;
+  align-items: center;  /* vertikal zentrieren */
+  gap: 0.5rem;          /* optionaler Abstand */
+  border: none;
+}
+
+.input-field {
+  font-size: var(--font-size);
+  font-family: "Orbitron", sans-serif;
+  padding: 0.2em 0.4em;
+  border: 2px solid var(--accent-color);
+  border-radius: 8px;
+  outline: none;
+  color: black;
+  background-color: white;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  width: 21em;
+  text-align:center;
+}
+
+.input-field:focus {
+  border-color: var(--accent-color);
+}
+
+.login-btn {
+  font-size: var(--font-size);
+  font-family: "Orbitron", sans-serif;
+  padding: 0.45em 0.8em;
+  background-color: white;
+  border: 2px solid var(--accent-color);
+  border-radius: 8px;
+  color: black;
+  cursor: pointer;
+
+  transition: background-color 0.2s ease,
+              color 0.2s ease,
+              box-shadow 0.2s ease,
+              transform 0.1s ease;
+}
+
+.login-btn:hover {
+  background-color: var(--accent-color);
+  color: white;
+  box-shadow: 0 0 6px var(--accent-color);
+  transform: translateY(-2px);
+}
+
+.login-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 0 3px var(--accent-color);
+}
+/* for debugging purposes */
+div {
+    border: inherit;
+}
+
+
+.debug {
+    border: 1px solid red;
+}
+
+.center {
+    display: block;
+    margin: auto;
+    margin-top: 3%;
+    width: 90%;
+    max-width: 140vh;
+    padding: 1rem;
+    text-align: center;
+}
+
+.main-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.results {
+    display: flex;
+    flex-direction: column-reverse;
+    font-weight: 500;
+}
+
+.result {
+    transition: background-color 250ms linear, flex-grow 500ms linear;
+    padding: 5px 10px 5px 10px;
+    margin-top: 8px;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.satisfied {
+    border: 3px solid var(--valid-border-color);
+    background-color: var(--valid-body-color);
+}
+
+.not-satisfied {
+    border: 3px solid var(--invalid-border-color);
+    background-color: var(--invalid-body-color);
+
+}
+
+#top-text {
+    font-family: "Orbitron";
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+#altura {
+    animation: bobbing 8s linear infinite;
+    display: inline-block;
+    color: white;
+    text-shadow: 0 0 5px #000000, 0 0 10px #000000, 0 0 15px #000000;
+}
+
+
+#password-field {
+    height: calc(1.75 * var(--font-size));
+    /*font-size: calc(1.1 * var(--font-size));*/
+}
+
+#animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+}
