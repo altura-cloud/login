@@ -116,7 +116,7 @@ const rules = [
     new Rule("Alle Kleinbuchstaben stehen zusammen.",
              "Alle Kleinbuchstaben müssen zusammenstehen.",
              (sf, nsf, pw) => {
-                const les = /[a-zäöü]/g;
+                const les = /[a-zäöü]+/g;
                 const groups = pw.match(les);
                 if (groups && groups.length > 1) {
                     return [false, nsf];
@@ -153,7 +153,7 @@ const rules = [
         ),
 
     new Rule((cs) => `Das Passwort besteht aus ${cs} Zeichen.`,
-             "Muss maximal 27 Zeichen haben.",
+             "Darf maximal 27 Zeichen haben.",
              (sf, nsf, pw) => pw.length <= 27 ? [true, sf(pw.length)] : [false, nsf]
             ),
 
@@ -161,6 +161,8 @@ const rules = [
     new Rule("Jeder Kleinbuchstabe kommt auch als Großbuchstabe vor",
          (char) => `Jeder Kleinbuchstabe muss auch als Großbuchstabe vorkommen, aber '${char}' gibt es nur klein.`,
          (sf, nsf, pw) => {
+            if (pw.length == 0)
+                return [true, sf];
             const upper_case = /[A-ZÄÖÜ]/g;
             const lower_case = /[a-zäöü]/g;
             let found_letters = new Set();
@@ -176,7 +178,7 @@ const rules = [
          }
         ),
 
-    new Rule("'BWV289 erfolgreich erkannt' ",
+    new Rule("'BWV289' erfolgreich erkannt.",
          audio_player,
          (sf, nsf, pw) => {
             if (pw.indexOf("BWV289") >= 0) {
@@ -184,7 +186,17 @@ const rules = [
             }
             return [false, nsf];
          }
-        )
+        ),
+    new Rule((money) => `Geldbetrag erkannt: ${money}`,
+        "Muss einen Geldbetrag zwischen 100 und 99999 Euro enthalten.",
+        (sf, nsf, pw) => {
+            const money_re = /\d{3,5}(?:,\d+)?€/g;
+            let match = pw.match(money_re);
+            if (match) {
+                return [true, sf(match[0])];
+            }
+            return [false, nsf];
+        })
 ]
 
 
@@ -196,17 +208,18 @@ function init_logic() {
 
     let password_field = document.getElementById("password-field");
     let results_display = new ResultsDisplay(document.getElementById('results'));
-    let validate = (total, only_revealed_rules=false) => {
+    let validate = (total, only_revealed_rules=false, by_enter=false) => {
         let results = pw_checker.check_password(password_field.value, only_revealed_rules);
         results_display.update_results(results, pw_checker.all_valid && !only_revealed_rules);
-        if (pw_checker.all_valid) {
+        if (pw_checker.all_valid && by_enter) {
+            alert("Sehr gut, ihr habt das Passwort erraten! Bitte öffnet den Umschlag mit der Wolke.")
             console.log("All good! Logging in...");
         }
     }
     document.getElementById("validate").onclick = () => {validate(pw_checker.rules.length)}
     window.addEventListener("keydown", event => {
         if (event.key == "Enter")
-            validate(pw_checker.rules.length);
+            validate(pw_checker.rules.length, false, true);
     })
     password_field.oninput = () => {
         validate(results_display.revealed, true);
