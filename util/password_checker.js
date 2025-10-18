@@ -32,18 +32,19 @@ class PasswordChecker {
             this.all_valid &= result;
             results.push([result, rule.result_string]);
         }
-        for (let i = 0; i < this.rules.length && this.all_valid && !only_revealed_rules; ++i) {
+        for (let i = 0; i < this.rules.length; ++i) {
             if (i in this.revealed_indices)
                 continue
             const rule = this.rules[i];
             const result = rule.satisfies(password);
-            this.all_valid &= result;
-            if (!result) {
+            if (!result && this.all_valid && !only_revealed_rules) {
+                this.all_valid = false;
                 results.push([result, rule.result_string]);
                 this.revealed_rules.push(rule);
                 this.revealed_indices.add(i);
                 return results;
             }
+            this.all_valid &= result;
 
         }
         return results;
