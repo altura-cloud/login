@@ -2,7 +2,7 @@ import {randint} from "../util/random.js"
 import {Cloud, Skyline} from "./background_objects.js"
 
 
-const FONT_SIZE = 0.018
+const FONT_SIZE = 0.02
 const skipped_frames = 10
 
 function resize(canvas_element) {
@@ -56,7 +56,7 @@ class BackgroundManager {
     }
 
     update_font_size() {
-        this.fontsize = Math.floor(FONT_SIZE * window.innerHeight)
+        this.fontsize = Math.floor(FONT_SIZE * Math.min(window.innerHeight, window.innerWidth))
         const ctx = this.canvas_element.getContext("2d");
         ctx.fontsize = this.fontsize;
         ctx.row_height = this.fontsize + 2;
@@ -69,7 +69,7 @@ class BackgroundManager {
         function draw(canvas, objects, keep_visible, frame_counter) {
             if (frame_counter == 0) {
                 const ctx = canvas.getContext("2d");
-                ctx.globalAlpha = Math.min(1, ctx.globalAlpha + 0.1)
+                ctx.globalAlpha = Math.min(0.7, ctx.globalAlpha + 0.1)
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 for (let obj of objects) {
                     obj.update();
