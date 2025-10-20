@@ -166,12 +166,18 @@ const rules = [
             const upper_case = /[A-ZÄÖÜ]/g;
             const lower_case = /[a-zäöü]/g;
             let found_letters = new Set();
-            for (const letter of pw.match(upper_case)) {
-                found_letters.add(letter.toLowerCase());
+            let upper_case_letters = pw.match(upper_case);
+            let lower_case_letters = pw.match(lower_case);
+            if (upper_case_letters) {
+                for (const letter of pw.match(upper_case)) {
+                    found_letters.add(letter.toLowerCase());
+                }
             }
-            for (const letter of pw.match(lower_case)) {
-                if (!found_letters.has(letter)) {
-                    return [false, nsf(letter)];
+            if (lower_case_letters) {
+                for (const letter of pw.match(lower_case)) {
+                    if (!found_letters.has(letter)) {
+                        return [false, nsf(letter)];
+                    }
                 }
             }
             return [true, sf];
@@ -235,3 +241,4 @@ document.addEventListener("DOMContentLoaded", () => {
     init_logic();
     init_background_animation();
 })
+
